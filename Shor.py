@@ -145,13 +145,14 @@ def shor_quantum(n):
     while best % 2 != 0:
         x = random.randint(2, n - 1)
         if math.gcd(x, n) != 1:
-            return x, 0, math.gcd(x, n), n / math.gcd(x, n)
+            return x, 0, math.gcd(x, n), int(n / math.gcd(x, n))
         circuit_aperiod15(shor, q, c, 7)
 
         backend = Aer.get_backend('qasm_simulator')
         sim_job = execute([shor], backend)
         sim_result = sim_job.result()
         sim_data = sim_result.get_counts(shor)
+        print(x)
         print(sim_data)
         best = best_result_number(sim_data)
         if x ** (best / 2) == 1 or x ** (best / 2) == -1:
@@ -168,7 +169,7 @@ def best_result_number(data):
         if data[key] > highest_hits:
             highest_hits = data[key]
             best_value = key
-    return int(best_value)
+    return int(best_value, base=2)
 
 
 if __name__ == "__main__":
